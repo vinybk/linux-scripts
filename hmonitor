@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Check if URL is passed as an argument
+if [ -z "$1" ]; then
+    echo "Usage: $0 <website_url>"
+    exit 1
+fi
+
+URL=$1
+PREVIOUS_STATUS=""
+
+while true; do
+    # Fetch header and extract HTTP status
+    STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+    TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+
+    # If status changes, print to terminal
+    if [ "$STATUS" != "$PREVIOUS_STATUS" ]; then
+        echo "[$TIMESTAMP] Status changed: $URL returned $STATUS"
+        PREVIOUS_STATUS=$STATUS
+    fi
+
+    # Wait for 30 seconds before checking again
+    sleep 1
+done

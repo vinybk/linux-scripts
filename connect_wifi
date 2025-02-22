@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Check if an SSID is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <SSID>"
+    exit 1
+fi
+
+SSID="$1"
+
+echo "Connecting to WiFi network: $SSID"
+
+# Attempt to connect using nmcli
+nmcli device wifi connect "$SSID"
+
+# Check if the connection was successful
+if [ $? -eq 0 ]; then
+    echo "Successfully connected to $SSID."
+else
+    echo "Failed to connect to $SSID."
+    exit 1
+fi

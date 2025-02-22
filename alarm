@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Default alarm sound
+default_sound="the-pirate.mp3"
+
+# Use the provided file or default to the-pirate.mp3
+alarm_sound="${1:-$default_sound}"
+
+# Check if the file exists
+if [ ! -f "$alarm_sound" ]; then
+    echo "Error: File '$alarm_sound' not found."
+    exit 1
+fi
+
+echo
+echo The time format = hours colon minutes e.g 07:30 for 7:30AM!
+echo
+
+printf "What time are you setting this alarm for? "
+read input_time
+echo
+
+# Get the current time and the target alarm time in seconds since epoch
+current_time=$(date +%s)
+alarm_time=$(date --date="$input_time" +%s)
+
+# If the alarm time is before the current time, set it for the next day
+if [ "$alarm_time" -le "$current_time" ]; then
+    alarm_time=$(date --date="tomorrow $input_time" +%s)
+fi
+
+# Calculate the sleep duration
+sleep_duration=$((alarm_time - current_time))
+
+echo "Okay! Alarm set for $(date --date="@$alarm_time")."
+sleep "$sleep_duration"
+
+echo
+echo "Wake up you lazy bum!"
+echo
+echo "Wake up you lazy bum!"
+echo
+echo "Wake up you lazy bum!"
+echo
+echo "Wake up you lazy bum!"
+echo
+echo "Wake up you lazy bum!"
+echo
+echo "Wake up you lazy bum!"
+
+
+vlc --loop "$alarm_sound"
